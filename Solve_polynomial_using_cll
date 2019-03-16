@@ -1,0 +1,173 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+typedef struct node
+{
+	int pow,coff;
+	struct node *next;
+}node;
+
+
+node *input(node *head,int *n)
+{
+	int i,j;
+	head=(node *)malloc(sizeof(node));
+	node *p;
+	p=head;
+	printf("How many terms you want enter in a polynomial\n");
+	scanf("%d",&(*n));
+	for(i=0;i<(*n);i++)
+	{
+		
+		printf("enter the power of %d term\n",i+1);
+		scanf("%d",&(p->pow));
+		printf("enter the cofficient of %d term\n",i+1);
+		scanf("%d",&(p->coff));
+		p->next=(node *)malloc(sizeof(node));
+		p=p->next;
+	}
+	p->next=head;
+	return (head);
+}
+
+void display(node *head,int m)
+{
+	node *p;
+	int i=0;
+	p=head;
+	do
+	{
+		printf("%d(x^%d)+",p->coff,p->pow);
+		p=p->next;i++;
+	}while(i<m);
+	printf("\n");
+}
+
+
+node *add1(node *h,node *h2,int l1,int l2,int *k)
+{
+	node *p=h,*q=h2,*ad=(node *)malloc(sizeof(node));
+	node *temp=ad,*pre;
+	int i=1,j=1;
+	*k=0;
+	while(i<=l1 && j<=l2)
+	{
+		if(p->pow==q->pow)
+		{
+			temp->pow=p->pow;
+			temp->coff=p->coff+q->coff;
+			p=p->next;q=q->next;
+			i++;j++;(*k)++;
+		}
+		else if(p->pow > q->pow)
+		{
+			temp->pow=p->pow;
+			temp->coff=p->coff;
+			p=p->next;
+			i++;(*k)++;
+		}
+		else if(p->pow < q->pow)
+		{
+			temp->pow=q->pow;
+			temp->coff=q->coff;
+			q=q->next;
+			j++;(*k)++;
+		}
+		
+		temp->next=(node *)malloc(sizeof(node));
+		pre=temp;
+		temp=temp->next;
+	}
+	while(i<=l1)
+	{
+		temp->pow=p->pow;
+		temp->coff=p->coff;
+		p=p->next;
+		temp->next=(node *)malloc(sizeof(node));
+		pre=temp;
+		temp=temp->next;
+		i++;(*k)++;
+	}
+	while(j<=l2)
+	{
+		temp->pow=q->pow;
+		temp->coff=q->coff;
+		q=q->next;
+		
+		temp->next=(node *)malloc(sizeof(node));
+		pre=temp;
+		temp=temp->next;
+		j++;(*k)++;
+	}
+	pre->next=ad;
+	
+	return (ad);
+}
+void mul(node *h,node *h2,int m,int n)
+{
+	node *p=h,*q=h2,*ad=(node *)malloc(sizeof(node)),*mu=(node *)malloc(sizeof(node)),*temp,*pre;
+	int k=1,i=1,j=1,w=0;
+	ad->pow=0;ad->coff=0;
+	ad->next=ad;
+	temp=mu;
+	for(i=1;i<=m;i++)
+	{
+		q=h2;mu=temp;
+		printf("start mul\n");
+		for(j=1;j<=n;j++)
+		{
+			printf("second loop\n");
+			mu->pow=(p->pow)+(q->pow);
+			mu->coff=(p->coff)*(q->coff);
+			q=q->next;
+			mu->next=(node *)malloc(sizeof(node));
+			pre=mu;
+			mu=mu->next;
+		}
+		printf("finish second loop\n");
+		pre->next=temp;
+		ad=add1(ad,temp,k,n,&w);
+		printf("add ho chuka h\n");
+		//display(ad,k);
+		k=w;
+		p=p->next;
+		//printf("\n");
+	}
+	display(ad,k);
+}
+int main()
+{
+	node *head,*head2,*ad;
+	int n,m,flag=1,x,i,j,k;
+	do{
+	printf("which operation you want to perform\n1.INPUT\n2.DISPLAY\n3.ADDITION\n4.MULTIPLICATION\n");
+	scanf("%d",&x);
+	switch(x)
+	{
+		case 1:
+				printf("enter the first polynomial\n");
+				head=input(head,&m);
+				printf("enter the second polynomial\n");
+				head2=input(head2,&n);
+				break;
+		case 2:
+				printf("_______first polynomial_______\n");
+				display(head,m);
+				printf("_______second polynomial_______\n");
+				display(head2,n);break;
+		case 3:
+				printf("________ADDITION_______\n");
+				ad=add1(head,head2,m,n,&k);
+				display(ad,k);
+				break;
+		case 4:
+				printf("_________MULTIPLICATION__________\n");
+				mul(head,head2,m,n);
+				break;
+	}
+	printf("you want to continue press <1> else press <0>\n");
+	scanf("%d",&flag);
+	}while(flag==1);
+}
+

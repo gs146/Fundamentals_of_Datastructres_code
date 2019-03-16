@@ -1,0 +1,175 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+	{
+	int data;
+	struct node* next;
+	struct node* prev;
+	}node;
+node* createlist(int n)
+	{
+	node *temp;
+	node *itr;
+	node *head=NULL;
+	for(int i=0;i<n;i++)
+		{
+		temp=(node*)(malloc(sizeof(node)));
+		printf("Enter the Data\n");
+		scanf("%d",&temp->data);
+		temp->prev=NULL;
+		temp->next=NULL;
+		if(head==NULL)
+			{
+			head=temp;			
+			}
+		else
+			{
+			itr=head;
+			while(itr->next!=NULL)
+				{
+				itr=itr->next;
+				}
+			itr->next=temp;
+			temp->prev=itr;
+			}
+		}
+		return head;
+	}
+	
+//display forward function
+void displayfrwd(node* head)
+	{
+	node* itr=head;
+	while(itr!=NULL)
+		{
+		printf("%d ",itr->data);
+		itr=itr->next;
+		}	
+	}
+//display backward function
+void displaybcwrd(node* head)
+	{
+	node* itr=head;
+	while(itr->next!=NULL)
+		{
+		itr=itr->next;
+		}	
+	while(itr!=NULL)
+		{
+		printf("%d ",itr->data);
+		itr=itr->prev;
+		} 
+	}
+//node insertion function
+node* insertnode(node* head,int n)
+	{
+	int oper;
+	node* itr=head;
+	node* temp=(node*)(malloc(sizeof(node)));
+	printf("Enter the node. no at which u want to enter new node\n");
+	scanf("%d",&oper);
+	printf("Enter the new node data\n");
+	scanf("%d",&temp->data);
+	temp->next==NULL;
+	temp->prev==NULL;
+	if(oper==1)
+		{
+		temp->next=head;
+		head->prev=temp;
+		head=temp;
+		return(head);
+		}
+	if(oper==n+1)
+		{
+		while(itr->next!=NULL)
+			itr=itr->next;
+		itr->next=temp;
+		temp->prev=itr;		
+		}
+	else
+		{
+		for(int i=0;i<oper-2;i++)
+			itr=itr->next;
+		temp->next=itr->next;
+		temp->prev=itr;
+		itr->next->prev=temp;
+		itr->next=temp;
+		}
+	printf("INSERTION SUCCESSFULL\n");
+	return(head);
+	}
+//node deletion function
+node* deletenode(node* head)
+	{
+	int i,oper;
+	node* itr;
+	printf("Enter the node no. you want to delete\n");
+	scanf("%d",&oper);
+	if(oper==1)
+		{
+		itr=head->next;
+		itr->prev=NULL;
+		free(head);
+		head=itr;
+		}
+	else
+		{
+		itr=head;
+		for(i=0;i<oper-2;i++)
+			itr=itr->next;
+		node* x;
+		x=itr->next->next;
+		if(x!=NULL)
+			x->prev=itr;
+		free(itr->next);
+		itr->next=x;
+		}
+	printf("DELETION SUCCESSFULL\n");
+	return(head);	
+	}
+//modify function
+void modify(node* head)
+	{
+	node* itr=head;
+	int i,oper,data;
+	printf("Enter the node no. u want to change data\n");
+	scanf("%d",&oper);
+	printf("Enter the new data\n");
+	scanf("%d",&data);
+	for(i=0;i<oper-1;i++)
+		itr=itr->next;
+	itr->data=data;	
+	printf("MODIFICATION SUCCESSFULL\n");
+	}
+
+int main()
+	{
+	node* head=NULL;
+	int n,flag;
+	printf("Enter the no. of nodes u want to create\n");
+	scanf("%d",&n);
+	head=createlist(n);
+	do
+		{
+		printf("\npress 1 to insert a node at any location\npress 2 to delete a node\npress 3 to modify a data\npress 4 to display forward\npress 5 to display backward\npress 0 to EXIT\n");
+		scanf("%d",&flag);
+		switch(oper)
+			{
+			case 1:
+				head=insertnode(head,n);
+				break;
+			case 2:
+				head=deletenode(head);
+				break;
+			case 3:
+				modify(head);
+				break;
+			case 4:
+				displayfrwd(head);
+				break;
+			case 5:
+				displaybcwrd(head);
+				break;
+			}
+		}while(flag!=0);
+	}

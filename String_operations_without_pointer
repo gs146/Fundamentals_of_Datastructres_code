@@ -1,0 +1,186 @@
+#include<stdio.h>
+
+void palindrome(char a[],int l)
+{
+  int i,cnt=0,t=l;
+  if(l%2==0)
+  l=l/2;
+  else
+  l=l/2+1;
+
+  for(i=0;i<l;i++)
+  {
+    if(a[i]!=a[t-i-1])
+    cnt++;
+  }
+
+    if(cnt==0)
+    printf("\n%s IS A PALINDROME\n",a);
+    else
+    printf("\n%s IS NOT A PALINDROME\n",a);
+}
+
+void reverse(char a[],int len)
+{
+  int i;
+  printf("\nREVERSE OF A STRING IS:");
+
+  for(i=len-1;i>=0;i--)
+  printf("%c",a[i]);
+
+}
+
+void compare(char a[],char b[],int l1)
+{
+  int i,l2=0,flag=0,k=0,j=0;
+
+  for(i=0;b[i]!='\0';i++)
+  l2++;
+
+  while(k<l1 || j<l2)
+  {
+	if(a[k]==b[j])
+	{
+	   k++;j++;
+	}
+	else
+	{
+ 	   printf("STRINGS ARE NOT SAME\n");
+	   flag=1;
+	   break;
+	}
+
+  }
+
+  if(flag==0)
+  printf("STRINGS ARE SAME\n");
+}
+
+void str_copy(char a[], char b[],int l1)
+{
+	int i,j,l2=0;
+
+  	for(i=0;b[i]!='\0';i++)
+  	l2++;
+
+	for(i=0;i<l2;i++)
+	{
+	  a[i]=b[i];
+	}
+	printf("UPDATED STRING IS:");
+	a[i]='\n';
+
+    for(j=0;a[j]!='\n';j++)
+    printf("%c",a[j]);
+}
+
+void substring(char a[],char b[],int l1)
+{
+    int i=0,j=0,l2=0,flag;
+
+    for(i=0;b[i]!='\0';i++)
+  	l2++;
+   for (i = 0; i <= l1-l2; i++)
+    {
+        for (j = i; j < i + l2; j++)
+        {
+            flag = 1;
+            if (a[j] != b[j - i])
+            {
+                flag = 0;
+                break;
+            }
+        }
+        if (flag == 1)
+            break;
+    }
+    if (flag == 1)
+        printf("\nSEARCH SUCCESSFUL! AND SUB-STRING FOUND AT LOCATION %d",i+1);
+    else
+        printf("\nSEARCH UNSUCCESSFUL!");
+}
+
+void concat(char a[],char b[], int l1)
+{
+    int i=0,j;
+
+    while(a[i]!='\0')
+        i++;
+
+  	for(j=0;b[j]!='\0';j++)
+    {
+        a[i+j]=b[j];
+    }
+    a[i+j]='\n';
+    printf("\nCONCATENATED STRING IS:");
+    for(j=0;a[j]!='\n';j++)
+    printf("%c",a[j]);
+}
+
+int main()
+{
+    int ch,len,i;
+    char word[100],s,b[100];
+
+    do
+	{
+        len=0;
+        i=0;
+	char c;
+        printf("\nENTER A STRING: ");
+        
+        c=getchar();
+	while(c!='\n')
+	{
+		word[i++]=c;
+		c=getchar();
+	}
+	
+	for(i=0;word[i]!='\0';i++)
+ 	len++;
+	printf("\nLENGTH: %d\n",len);
+
+	printf("\n---STRING MANIPULATION OPERATIONS---\n\n");
+	printf("1.PALINDROME\n2.REVERSE\n3.COMPARE TWO STRINGS\n4.STRING COPY\n5.SUBSTRING\n6.STRING CONCATENATION\n\nENTER YOUR CHOICE:");
+	scanf("%d",&ch);
+	
+	switch(ch)
+	{
+		case 1:	palindrome(word,len);
+				break;
+
+		case 2:	reverse(word,len);
+				break;
+
+		case 3:	printf("ENTER THE STRING TO BE COMPARED:");
+				scanf("%s",b);
+				compare(word,b,len);
+				break;
+
+		case 4:	printf("ENTER STRING TO BE COPIED:");
+				scanf("%s",b);
+				str_copy(word,b,len);
+				break;
+				
+		case 5: printf("ENTER THE STRING TO BE CHECKED:");
+		
+                c=getchar();
+		while(c!='\n')
+		{
+		b[i++]=c;
+		c=getchar();
+		}
+	
+                substring(word,b,len);
+                break;
+
+        	case 6: printf("ENTER THE STRING TO ADD:");
+                scanf("%s",b);
+                concat(word,b,len);
+                break;
+	}
+	getchar();
+	}while(ch!=0);
+	return 0;
+}
+

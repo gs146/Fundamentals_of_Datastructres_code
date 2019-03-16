@@ -1,0 +1,137 @@
+#include<stdio.h>
+
+void bubble_sort(char s[][5],int n)
+{
+    int i,j,c=0,k;
+    char temp[50];
+    for(i=0; i<n-1; i++)
+    {
+        for(j=0; j<n-i-1; j++)
+        {
+            c = strcmp(s[j],s[j+1]);
+            if(c>0)
+            {
+                strcpy(temp,s[j]);
+                strcpy(s[j],s[j+1]);
+                strcpy(s[j+1],temp);
+            }
+        }
+        printf("\nValue after PASS: %d ",(i+1));
+        for(k=0; k<n; k++)
+        printf("%s ",s[k]);
+    }
+}
+void selection_sort(char s[][10],int n)
+{
+    int i,j,k,pos;
+    char min[50];
+
+    for(i=0; i<n-1; i++)
+    {
+        strcpy(min,s[i]);
+        for(j=i+1; j<n; j++)
+        {
+            if(strcmp(min,s[j])<0)
+            {
+                strcpy(min,s[j]);
+                strcpy(s[j],s[i]);
+                strcpy(s[i],min);
+
+            }
+        }
+        printf("\nValue after PASS: %d ",(i+1));
+        for(k=0; k<n; k++)
+        printf("%s ",s[k]);
+    }
+
+}
+
+void binary_search(char s[][10],int n, char find[50])
+{
+    int top=0,bottom=n-1,flag=1;
+    int mid;
+
+    while(top <= bottom)
+        {
+        mid = (bottom + top)/2;
+        if (strcmp(s[mid], find) == 0){
+                flag=0;
+            printf("%s found at location %d.\n", find, mid+1);
+            break;
+        }
+        if (strcmp(s[mid], find) >0){
+            top= mid +1;
+        }
+        if (strcmp(s[mid], find) <0){
+            bottom= mid+1;
+        }
+
+    }
+if(flag==1)
+    printf("\nNOT FOUND\n");
+}
+
+int search_rec(char s[][10],int n, char find[50],int top, int bottom, int mid)
+{
+   int flag=1;
+
+        mid = (bottom + top)/2;
+        if (strcmp(s[mid], find) == 0)
+        {
+                flag=0;
+            printf("%s found at location %d.\n", find, mid+1);
+
+        }
+        else if (strcmp(s[mid], find) >0){
+            top= mid ;
+        }
+        else if (strcmp(s[mid], find) <0){
+            bottom= mid;
+        }
+        if(top>=bottom)
+        {
+            printf("\nNOT FOUND\n");
+            return 0;
+        }
+        if(top <= bottom && flag==1)
+        {
+            search_rec(s,n,find,top,bottom,mid);
+        }
+
+
+
+}
+int main()
+{
+    int n,i,j;
+    char string[50][5],find[50];
+    printf("HOW MANY STRINGS TO ENTER: ");
+    scanf("%d",&n);
+    printf("\nASCENDING ORDER\n");
+    for(i=0; i<n; i++)
+    {
+        printf("\nENTER STRING: ");
+        scanf("%s",string[i]);
+    }
+
+    bubble_sort(string,n);
+
+    printf("\nHOW MANY STRINGS TO ENTER: ");
+    scanf("%d",&n);
+    printf("\nDESCENDING ORDER\n");
+    for(i=0; i<n; i++)
+    {
+        printf("\nENTER STRING: ");
+        scanf("%s",string[i]);
+    }
+    selection_sort(string,n);
+
+    printf("\n------------------------------\nBINARY SEARCH (WITHOUT RECURSION)\n");
+    printf("\nENTER ETRING TO TO BE SEARCHED: ");
+   scanf("%s",find);
+    //binary_search(string,n,find);
+    printf("\n------------------------------\nBINARY SEARCH (WITH RECURSION)\n");
+    int top=0,bottom=n-1,mid=(top+bottom)/2;
+    search_rec(string,n,find,top,bottom, mid);
+
+}

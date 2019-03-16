@@ -1,0 +1,160 @@
+#include<stdio.h>
+
+typedef struct student
+{
+    int rno;
+    char name[20];
+    int m1,m2;
+    float per;
+} student;
+
+void create()
+{
+    FILE *fp;
+    fp=fopen("student.txt","a+");
+    student s;
+    int y;
+    if(fp==NULL)
+        printf("error ");
+    else
+    {
+        do{
+        printf("\nenter rno:");
+        scanf("%d",&s.rno);
+        printf("\nEnter name of student");
+        //scanf("%c",&dummy);
+        scanf("%10s",s.name);
+        printf("\nEnter marks obtained by student in subject 1(max 100)");
+        scanf("%2d",&s.m1);
+        printf("\nEnter marks obtained by student in subject 2(max 100)");
+        scanf("%2d",&s.m2);
+        s.per=(float)(s.m1+s.m2)/2.0;
+
+        fwrite(&s,sizeof(student),1,fp);
+        printf("\nwant to add more record:");
+        scanf("%d",&y);
+    }while(y!=0);
+    }
+    fclose(fp);
+}
+
+void display()
+{
+    FILE *fp;
+    student s;
+    int i=1;
+    fp=fopen("student.txt","r");
+    while(fread(&s,sizeof(student),1,fp))
+    {
+        printf("\n------------------------------------------------------------");
+            printf("\nRecord number - %d",i);
+            printf("\n------------------------------------------------------------");
+            printf("\nRoll number of student - %d",s.rno);
+            printf("\nname of student - %s",s.name);
+            printf("\nMarks obtained by student in subject 1 - %d",s.m1);
+            printf("\nMarks obtained by student in subject 2 - %d",s.m2);
+            printf("\nPercentage obtained by student - %2.2f%%\n",s.per);
+            i++;
+    }
+    fclose(fp);
+}
+
+void delete_rec()
+{
+    FILE *fp,*fq;
+    fp=fopen("student.txt","r");
+    fq=fopen("temp.txt","w");
+    int r,flag=0;
+    student s;
+    printf("\n enter roll no to be deleted:");
+    scanf("%d",&r);
+    while(fread(&s,sizeof(student),1,fp))
+    {
+        if(s.rno==r)
+        flag=1;
+        else
+        {
+            fwrite(&s,sizeof(student),1,fq);
+        }
+    }
+    if(flag==1)
+        printf("\n\nDELETED-----");
+    else
+        printf("\n\nNOT DELETED-----");
+
+    fclose(fp);
+    fclose(fq);
+    remove("student.txt");
+    rename("temp.txt","student.txt");
+
+}
+
+void insert()
+{
+    FILE *fp,*fq;
+    student s,a;char dummy;
+    fp=fopen("student.txt","r");
+    fq=fopen("temp.txt","w");
+    int i=1,pos;
+    printf("\n enter position:");
+    scanf("%d",&pos);
+    //int i=1;
+    printf("\nEnter roll no student");
+        scanf("%d",&a.rno);
+    printf("\nEnter name of student");
+        scanf("%c",&dummy);
+        scanf("%[^\n]c",a.name);
+        printf("\nEnter marks obtained by student in subject 1(max 100)");
+        scanf("%d",&a.m1);
+        printf("\nEnter marks obtained by student in subject 2(max 100)");
+        scanf("%d",&a.m2);
+        s.per=(float)(a.m1+a.m2)/2.0;
+    while(fread(&s,sizeof(student),1,fp))
+    {
+        if(i!=pos)
+            fwrite(&s,sizeof(student),1,fq);
+        else{
+            fwrite(&a,sizeof(student),1,fq);
+            fwrite(&s,sizeof(student),1,fq);
+        }
+        i++;
+    }
+    if(pos>=i)
+        fwrite(&a,sizeof(student),1,fq);
+    fclose(fp);
+    fclose(fq);
+    remove("student.txt");
+    rename("temp.txt","student.txt");
+
+}
+
+int main()
+{
+
+    student s;
+    int n,ch;
+
+    do
+    {
+        printf("\n\n----MENU-----\n1.Create database\n2.Display\n3.Delete\n4.Modify\n5.Insert\nENTER YOUR CHPOICE:");
+        scanf("%d",&n);
+        switch(n)
+        {
+            case 1: printf("\n enter data:");
+                create();
+                break;
+            case 2:
+                printf("\n\n-------databse-----\n");
+                display();
+                break;
+            case 3:delete_rec();
+            break;
+            case 4:
+                insert();
+                break;
+
+        }
+        printf("\nWant to continue:");
+        scanf("%d",&ch);
+    }while(ch!=0);
+}

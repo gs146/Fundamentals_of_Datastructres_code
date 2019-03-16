@@ -1,0 +1,181 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct employee
+{
+    char name[50];
+    int emp_id,expe;
+    float salary;
+};
+
+void create(struct employee *emp,int n)
+{
+    int i,k=0,t,j,flag;
+    for(i=0;i<n;i++)
+    {
+        flag=0;
+        printf("\nEMPLOYEE NAME:");
+        scanf("%s",emp[i].name);
+        printf("\nEMPLOYEE ID:");
+        scanf("%d",&t);
+        if(i>0)
+        {
+            for(j=0; j<=i; j++)
+            {
+            if(t == emp[j].emp_id)
+            {
+                printf("ID EXISTS!!\nENTER NEW ID:");
+                scanf("%d",&emp[i].emp_id);
+                flag = 1;
+                break;
+            }
+            }
+        }
+        if(flag==0)
+        {
+            emp[i].emp_id = t;
+        }
+
+        printf("\nEXPERIENCE:");
+        scanf("%d",&emp[i].expe);
+        printf("\nSALARY:");
+        scanf("%f",&emp[i].salary);
+    }
+
+}
+
+void display(struct employee *emp, int n)
+{
+    int i;
+    printf("\n-----DATABASE-----\n\nNAME\tID\tEXPERIENCE\tSALARY\n");
+    for(i=0;i<n;i++)
+    {
+        printf("%s\t%d\t%d\t\t%.2f\n",emp[i].name,emp[i].emp_id,emp[i].expe,emp[i].salary);
+    }
+    printf("\n");
+}
+
+void insert(struct employee *emp,int n)
+{
+        printf("\nEMPLOYEE NAME:");
+        scanf("%s",emp[n-1].name);
+        printf("\nEMPLOYEE ID:");
+        scanf("%d",&emp[n-1].emp_id);
+        printf("\nEXPERIENCE:");
+        scanf("%d",&emp[n-1].expe);
+        printf("\nSALARY:");
+        scanf("%f",&emp[n-1].salary);
+}
+
+void search(struct employee *emp,int n, int t)
+{
+    int i,flag=0;
+    for(i=0; i<n; i++)
+    {
+        if(t == emp[i].emp_id)
+        {
+        flag=1;
+        printf("\nEMPLOYEE NAME:");
+        printf("%s",emp[i].name);
+        printf("\nEMPLOYEE ID:");
+        printf("%d",emp[i].emp_id);
+        printf("\nEXPERIENCE:");
+        printf("%d",emp[i].expe);
+        printf("\nSALARY:");
+        printf("%f",emp[i].salary);
+        }
+    }
+    if(flag == 0)
+        printf("\n**------NO RECORD FOUND------**\n");
+}
+
+void modify(struct employee *emp,int n, int t)
+{
+    int i,flag=0;
+    for(i=0; i<n; i++)
+    {
+        if(t == emp[i].emp_id)
+        {
+        flag=1;
+        printf("\nEMPLOYEE NAME:");
+        scanf("%s",emp[i].name);
+        printf("\nEMPLOYEE ID:");
+        scanf("%d",&emp[i].emp_id);
+        printf("\nEXPERIENCE:");
+        scanf("%d",&emp[i].expe);
+        printf("\nSALARY:");
+        scanf("%f",&emp[i].salary);
+        }
+    }
+    if(flag == 0)
+        printf("\n**------NO RECORD FOUND------**\n");
+    else
+        printf("\n**------UPDATED SUCCESSFULLY-------**\n");
+
+}
+int main()
+{
+    struct employee *e;
+    int n=0,i,ch,t,j;
+
+    do
+    {
+        printf("\n\n---EMPLOYEE DATABASE---\n");
+        printf("1.CREATE DATABASE\n2.INSERT DATABASE\n3.DELETE RECORD\n4.SEARCH\n5.DISPLAY\n6.MODIFY RECORD\n7.TO EXIT PRESS '0'\n\nENTER YOUR CHOICE:");
+        scanf("%d",&ch);
+
+        switch(ch)
+        {
+            case 1: printf("HOW MANY RECORDS YOU WANT TO ENTER: ");
+                    scanf("%d",&n);
+                    e = malloc(sizeof(struct employee)*n);
+                    create(e,n);
+                    break;
+
+            case 2: printf("\n-----------ADD RECORD----------\n");
+                    e =  realloc(e,sizeof(struct employee)*(n+1));
+                    n = n+1;
+                    insert(e,n);
+                    break;
+
+            case 3: if(n == 0)
+                    printf("\n**------ DATABASE IS EMPTY ------**\n");
+                    else{
+                    printf("\nENTER EMPLOYEE ID FOR WHICH DATA IS TO BE DELETED: ");
+                    scanf("%d",&t);
+                    int flag=0;
+                    for(i=0; i<n; i++)
+                    {
+                        if(t == e[i].emp_id)
+                        {
+                            flag=1;
+                            for(j=i;j<n-1;j++)
+                            {
+                                e[j]=e[j+1];
+                            }
+                        }
+                    }
+                    e =  realloc(e, sizeof(struct employee)*(n-1));
+                    n = n-1;
+                    if(flag == 0)
+                        printf("\n**NO DATABASE FOUND FOR THIS ID**\n");
+                    else
+                        printf("\n**-----DATA DELETED------**\n\n");
+                    }
+                    break;
+
+            case 4: printf("\nENTER EMPLOYEE's ID TO SEARCH DATABASE: ");
+                    scanf("%d",&t);
+                    search(e,n,t);
+                    break;
+
+            case 5: display(e,n);
+                    break;
+
+            case 6: printf("\nENTER EMPLOYEE's ID TO MODIFY THAT DATABASE: ");
+                    scanf("%d",&t);
+                    modify(e,n,t);
+                    break;
+        }
+    }while(ch!=0);
+}

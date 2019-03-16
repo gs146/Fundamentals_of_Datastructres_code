@@ -1,0 +1,108 @@
+#include<stdio.h>
+void merge_sort(int arr[],int low,int high);
+void merge(int a[],int l,int m,int u);
+void nr_mergesort(int a[], int N);
+int main()
+{
+  int n,l,i;
+  int arr[20], brr[20];
+  printf("Enter the size of array 1(max. 20)\n");  // input the elements
+  scanf("%d",&n);
+  printf("Enter the elements:");
+  for(i=0;i<n;i++)
+    scanf("%d",&arr[i]);
+
+  printf("Enter the size of array 2(max. 20)\n");  // input the elements
+  scanf("%d",&l);
+  printf("Enter the elements:");
+  for(i=0;i<l;i++)
+    scanf("%d",&brr[i]);
+
+  merge_sort(arr,0,n-1);  // sort the array
+  nr_mergesort(brr, l);
+
+  printf("\nSorted array 1:");  // print sorted array
+  for(i=0;i<n;i++)
+    printf("%d ",arr[i]);
+  printf("\n");
+
+  printf("\nSorted array 2:");  // print sorted array
+  for(i=0;i<l;i++)
+    printf("%d ",brr[i]);
+  printf("\n");
+
+  return 0;
+}
+
+void merge_sort(int arr[],int low,int high)
+{
+  int mid;
+  if(low<high)
+  {
+    mid=(low+high)/2;
+   // Divide and Conquer
+    merge_sort(arr,low,mid);
+    merge_sort(arr,mid+1,high);
+   // Combine
+    merge(arr,low,mid,high);
+  }
+
+}
+
+void merge(int a[],int l,int m,int u)
+{
+  int c[100];
+  int i=0,j=0,k=0;
+  while(i <= m && j <= u)
+  {
+    if(a[i]<a[j])
+    {
+      c[k] = a[i];
+      i++, k++;
+    }
+    else
+    {
+      c[k] = a[j];
+      j++, k++;
+    }
+  }
+
+  while(i <= m)
+  {
+    c[k] = a[i];
+    i++, k++;
+  }
+  while(j <= u)
+  {
+    c[k] = a[j];
+    j++, k++;
+  }
+  for(i = l, j = 0; i <= u; i++, j++)
+    a[i] = c[j];
+}
+
+void nr_mergesort(int a[], int N)
+{
+  int run_size, no_of_runs, i, j;
+  run_size = 1;
+  while(run_size<N)
+  {
+    no_of_runs = N/run_size;
+    if(no_of_runs * run_size < N)
+      no_of_runs++;
+    i=0; j=run_size;
+    while(no_of_runs>1)
+    {
+      if(i + 2*run_size>1)
+      {
+        merge(a, i, j-1, N-1);
+      }
+      else
+        merge(a, i, j-1, j+run_size-1);
+      i = i + run_size;
+      j = j + run_size;
+      no_of_runs = no_of_runs - 2;
+    }
+    run_size = run_size*2;
+  }
+}
